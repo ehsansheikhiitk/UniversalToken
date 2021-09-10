@@ -5,6 +5,6 @@
 - 📫 You can reach me on my email: ehsansheikh20@gmail.com.
 
 <!---
-ehsansheikhiitk/ehsansheikhiitk is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+ehsansheikhiitk/UniversalToken is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 You can click the Preview link to take a look at your changes.
 --->
