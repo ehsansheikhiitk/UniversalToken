@@ -1,0 +1,171 @@
+#
+#  Panoramix v4 Oct 2019 
+#  Decompiled source of bsc:0x42E922645621375fC3E761961D68f148b2639a97
+# 
+#  Let's make the world open source 
+# 
+
+def storage:
+  totalSupply is uint256 at storage 0
+  allowance is mapping of uint256 at storage 1
+  stor2 is mapping of uint8 at storage 2
+  balanceOf is mapping of uint256 at storage 3
+  owner is addr at storage 4
+  stor4 is uint128 at storage 4 offset 160
+  paused is uint8 at storage 4 offset 160
+  name is array of uint256 at storage 5
+  symbol is array of uint256 at storage 6
+  decimals is uint256 at storage 7
+
+def name(): # not payable
+  return name[0 len name.length]
+
+def totalSupply(): # not payable
+  return totalSupply
+
+def decimals(): # not payable
+  return decimals
+
+def paused(): # not payable
+  return bool(paused)
+
+def balanceOf(address _owner): # not payable
+  return balanceOf[addr(_owner)]
+
+def owner(): # not payable
+  return owner
+
+def symbol(): # not payable
+  return symbol[0 len symbol.length]
+
+def allowance(address _owner, address _spender): # not payable
+  return allowance[addr(_owner)][addr(_spender)]
+
+#
+#  Regular functions
+#
+
+def _fallback() payable: # default function
+  revert
+
+def unpause(): # not payable
+  require caller == owner
+  require paused
+  stor4 = 0
+  log Unpause()
+
+def pause(): # not payable
+  require caller == owner
+  require not paused
+  stor4 = 1
+  log Pause()
+
+def transferOwnership(address _newOwner): # not payable
+  require caller == owner
+  require _newOwner
+  log OwnershipTransferred(
+        address previousOwner=owner,
+        address newOwner=_newOwner)
+  owner = _newOwner
+
+def approve(address _spender, uint256 _value): # not payable
+  require not paused
+  allowance[caller][addr(_spender)] = _value
+  log Approval(
+        address owner=_value,
+        address spender=caller,
+        uint256 value=_spender)
+  return 1
+
+def unknown794be707(addr _param1, bool _param2): # not payable
+  require not paused
+  require caller == owner
+  require bool(stor2[addr(_param1)]) != _param2
+  stor2[addr(_param1)] = uint8(_param2)
+  log 0xf7e58a63: _param2, _param1
+  return 1
+
+def burn(uint256 _value): # not payable
+  require _value <= balanceOf[caller]
+  require _value <= balanceOf[caller]
+  balanceOf[caller] -= _value
+  require _value <= totalSupply
+  totalSupply -= _value
+  log Burn(
+        address burner=_value,
+        uint256 value=caller)
+  log Transfer(
+        address from=_value,
+        address to=caller,
+        uint256 value=0)
+
+def increaseApproval(address _spender, uint256 _addedValue): # not payable
+  require not paused
+  require allowance[caller][addr(_spender)] + _addedValue >= allowance[caller][addr(_spender)]
+  allowance[caller][addr(_spender)] += _addedValue
+  log Approval(
+        address owner=allowance[caller][addr(_spender)],
+        address spender=caller,
+        uint256 value=_spender)
+  return 1
+
+def decreaseApproval(address _spender, uint256 _subtractedValue): # not payable
+  require not paused
+  if _subtractedValue <= allowance[caller][addr(_spender)]:
+      allowance[caller][addr(_spender)] -= _subtractedValue
+  else:
+      allowance[caller][addr(_spender)] = 0
+  log Approval(
+        address owner=allowance[caller][addr(_spender)],
+        address spender=caller,
+        uint256 value=_spender)
+  return 1
+
+def mint(address _to, uint256 _amount): # not payable
+  require caller == owner
+  require totalSupply + _amount >= totalSupply
+  totalSupply += _amount
+  require balanceOf[addr(_to)] + _amount >= balanceOf[addr(_to)]
+  balanceOf[addr(_to)] += _amount
+  log Mint(
+        address from=_amount,
+        address to=0,
+        uint256 amount=_to)
+  log Transfer(
+        address from=_amount,
+        address to=0,
+        uint256 value=_to)
+
+def transfer(address _to, uint256 _value): # not payable
+  require not paused
+  require not stor2[caller]
+  require _to
+  require _value <= balanceOf[caller]
+  require _value <= balanceOf[caller]
+  balanceOf[caller] -= _value
+  require balanceOf[addr(_to)] + _value >= balanceOf[addr(_to)]
+  balanceOf[addr(_to)] += _value
+  log Transfer(
+        address from=_value,
+        address to=caller,
+        uint256 value=_to)
+  return 1
+
+def transferFrom(address _from, address _to, uint256 _value): # not payable
+  require not paused
+  require not stor2[caller]
+  require _to
+  require _value <= balanceOf[addr(_from)]
+  require _value <= allowance[addr(_from)][caller]
+  require _value <= balanceOf[addr(_from)]
+  balanceOf[addr(_from)] -= _value
+  require balanceOf[addr(_to)] + _value >= balanceOf[addr(_to)]
+  balanceOf[addr(_to)] += _value
+  require _value <= allowance[addr(_from)][caller]
+  allowance[addr(_from)][caller] -= _value
+  log Transfer(
+        address from=_value,
+        address to=_from,
+        uint256 value=_to)
+  return 1
+
